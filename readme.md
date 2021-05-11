@@ -42,10 +42,10 @@ The backend consists of 6 url endpoints:
 
     ```json
     {
-      "fname": <first name>,
-    	"lname": <last name>,
+      "fname": <first_name>,
+    	"lname": <last_name>,
       "age": <age>,
-    	"patient_id": <mac address>
+    	"patient_id": <mac_address>
     }
     ```
 
