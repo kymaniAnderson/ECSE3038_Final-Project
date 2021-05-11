@@ -45,7 +45,7 @@ The backend consists of 6 url endpoints:
       "fname": <first_name>,
     	"lname": <last_name>,
       "age": <age>,
-    	"patient_id": <mac_address>
+      "patient_id": <mac_address>
     }
     ```
 
