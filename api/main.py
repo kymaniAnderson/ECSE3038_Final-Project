@@ -4,7 +4,7 @@ from marshmallow import Schema, fields, ValidationError
 from bson.json_util import dumps
 from flask_cors import CORS
 from json import loads
-from api import keys
+from keys import keys
 import datetime
 
 app = Flask(__name__)
@@ -13,45 +13,116 @@ CORS(app)
 app.config["MONGO_URI"] = "mongodb+srv://admin:"+keys["pw"]+"@cluster0.41j7h.mongodb.net/"+keys["nm"]+"?retryWrites=true&w=majority"
 mongo = PyMongo(app)
 
-db_operations = mongo.db.tanks
+db_operations_patients = mongo.db.patients
+db_operations_records = mongo.db.records
 dte = datetime.datetime.now()
 
-class Level(Schema):
-    tank_id = fields.Integer(required=True)
-    temp = fields.Integer(required=True)
-    accel = fields.Integer(required=True)
+class PatientSchema(Schema):
+    fname = fields.String(required=True)
+    lname = fields.String(required=True)
+    age = fields.Integer(required=True)
+    patient_id = fields.String(required=True)
 
-@app.route("/", methods=["GET"])
+class RecordSchema(Schema):
+    position = fields.String(required=True)
+    temperature = fields.Integer(required=True)
+    last_updated = fields.String(required=True)
+    patient_id = fields.String(required=True)
+
+# ROUTE 1:
+@app.route("/api/patient", methods=["GET", "POST"])
 def home():
-    return "hello lab 6"
+    if request.method == "POST":
+        # /POST
+        try: 
+            fname = request.json["fname"]
+            lname = request.json["lname"]
+            age = request.json["age"]
+            patient_id = request.json["patient_id"]
 
-# TANK ROUTE:
-@app.route("/tank", methods=["POST"])
-def postTankData():
+            jsonBody = {
+                "fname": fname,
+                "lname": lname,
+                "age": age,
+                "patient_id": patient_id
+            }
+            
+            newPatient = PatientSchema().load(jsonBody)
+            db_operations_patients.insert_one(newPatient)
+
+            return {
+                "sucess": True,
+                "message": "Patient saved to database successfully!"
+            }, 200
+
+        except ValidationError as err1:
+            return {
+                "sucess": False,
+                "message": "An error occured while trying to post patient"
+            }, 400
+    else:
+        # /GET
+        patients = db_operations_patients.find()
+
+        return  jsonify(loads(dumps(patients))), 200
+
+# ROUTE 2:
+@app.route("/api/patient/<path:id>", methods=["GET", "PATCH", "DELETE"])
+def patientProfile(id):
+     
+    filt = {"patient_id" : id}
+
+    if request.method == "PATCH":
+        # /PATCH
+        updates = {"$set": request.json}
+        db_operations_patients.update_one(filt, updates)      
+        updatedPatient = db_operations_patients.find_one(filt)
+
+        return  jsonify(loads(dumps(updatedPatient)))
+
+    elif request.method == "DELETE":
+        # /DELETE
+        tmp = db_operations_patients.delete_one(filt)
+        result = {"sucess" : True} if tmp.deleted_count == 1 else {"sucess" : False}
+       
+        return result
+
+    else:
+        # /GET
+        patient = db_operations_patients.find_one(filt)
+
+        return  jsonify(loads(dumps(patient)))
+
+# ROUTE 3:
+@app.route("/api/record", methods=["POST"])
+def postPatientData(id):
     try:
-        tank_id = request.json["tank_id"]
-        temp = request.json["temp"]
-        accel = request.json["accel"]
-        
+        position = request.json["position"]
+        temperature = request.json["temperature"]
+        last_updated = dte.strftime("%c")
+        patient_id = request.json["patient_id"]
 
         jsonBody = {
-            "tank_id": tank_id,
-            "temp": temp,
-            "accel": accel
+            "position": position,
+            "temperature": temperature,
+            "last_updated": last_updated,
+            "patient_id": patient_id
         }
-        
-        newTank = Level().load(jsonBody)
 
-        db_operations.insert_one(newTank)
-        
+        newRecord = RecordSchema().load(jsonBody)
+        db_operations_records.insert_one(newRecord)
+
         return{
             "success": True,
-            "msg": "data saved in database successfully",
-            "date": dte.strftime("%c")
-        }
-    except ValidationError as e:
-        return e.messages, 400
+            "message": "Record saved to database successfully"
+        }, 200
+
+    except ValidationError as err2:
+        return{
+            "success": False,
+            "message": "An error occured while trying to post record"
+        }, 400
 
 # Main
 if __name__ == '__main__':
-   app.run(debug = True, host="192.168.100.82", port="5000")
+   app.run(debug = True, port="5000")
