@@ -1,55 +1,54 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
-#include <Adafruit_MPU6050.h>
-#include <Adafruit_Sensor.h>
+#include <MPU6050.h>
 #include <Wire.h>
 
-Adafruit_MPU6050 mpu;
+MPU6050 mpu;
 
 #define RX 10
 #define TX 11
 #define DEBUG true
 #define TIMEOUT 3000
-#define TEMP_PIN 0
+#define TEMP_PIN A0
 
-String ID = "Digicel_WiFi_dHNK";
-String PW = "eYPXjQ29";
-String HOST = "192.168.100.82";
+String ID = "Nicho";
+String PW = "15532E&w";
+String HOST = "192.168.137.31";
 int PORT = 5000;
 
-int tankID = 0;
+int16_t gx, gy, gz;
 
 SoftwareSerial espSerial(RX, TX); // RX, TX
 
 String sendData(String command, const int timeout, boolean debug);
-int getAccel();
+String getMacAddress();
+String getPos();
 int getTemp();
 
-void setup() {
+void setup(){
   espSerial.begin(115200);
   Serial.begin(115200);
 
-  //ESP Stuff:
+  /*******   ESP Setup   *******/
+  // 1. Reset:
   sendData("AT+RST", TIMEOUT, DEBUG);
+  
+  // 2. Config SoftAP + Station Mode:
+  sendData("AT+CWMODE=3", TIMEOUT, DEBUG);
+
+  // 3. Join Access-point:
   String SETUP = "AT+CWJAP=";
-  SETUP.concat("\"" + ID + "\",\"" + PW + "\"");
+  SETUP.concat("\"" + ID + "\",\"" + PW + "\""); 
   sendData(SETUP, TIMEOUT, DEBUG);
 
-  //GYRO Stuff:
-  while (!Serial)
-    delay(10);
+  /*******   GYRO Setup   *******/
+  // 1. Initialize:
+  Serial.println("Initializing MPU6050...");
+  mpu.initialize();
 
-  //initialize!
-  if (!mpu.begin()){
-    Serial.println("MPU6050 NOT FOUND!");
-    
-    while (1){
-      delay(10);
-    }
-  }
-  Serial.println("MPU6050 FOUND!");
-  
-  mpu.setAccelerometerRange(MPU6050_RANGE_8_G);  //+-2G, +-4G, +-8G, +-16G
+  // 2. Test Connection:
+  Serial.println("Testing MPU6050...");
+  Serial.println(mpu.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
 }
 
 void loop() {  
@@ -57,16 +56,14 @@ void loop() {
   START.concat("\"" + HOST + "\"," + PORT);
   sendData(START, TIMEOUT, DEBUG);
 
-  tankID ++;
-
-  String BODY = "{\"tank_id\":" + String(tankID) + ", \"temp\":" + String(getTemp()) + "}\r\n" + ", \"accel\":" + getAccel() + "}\r\n";
+  String BODY = "{\"patient_id\":" + getMacAddress() + ", \"position\":" + getPos() + "}\r\n" + ", \"temperature\":" + String(getTemp()) + "}\r\n";
   
   String POST = "POST /tank HTTP/1.1\r\n";                              //line 1
   POST.concat("Host: " + HOST + ":" + PORT + "\r\n");                   //line 2
   POST.concat("Content-Type: application/json\r\n");                    //line 3 
   POST.concat("Content-Length: " + String(BODY.length()) + "\r\n\r\n"); //line 4
   POST.concat(BODY);                                                    //line 5
-  
+  Serial.println(POST);
 
   String SEND = "AT+CIPSEND=";
   SEND.concat(POST.length());
@@ -98,16 +95,29 @@ String sendData(String command, const int timeout, boolean debug){
 
 int getTemp(){
   int snsrRead = analogRead(TEMP_PIN);
-  int temp = temp * 0.48828125;
+  int temp = snsrRead * 0.48828125;
+  
   return temp;                   
 }
 
-int getAccel(){
-  sensors_event_t a, g, temp;
-  mpu.getEvent(&a, &g, &temp);
+String getPos(){//TODO
+  mpu.getRotation(&gx, &gy, &gz);
+  String pos;
+    
+  if (gy > 2.0){
+    pos = "Upright";
+  }
+  else{
+    pos="Resting";
+  }
   
-  int val = sq(a.acceleration.x) + sq(a.acceleration.y) + sq(a.acceleration.z);
-  int accel = sqrt(val);
+  return pos;
+}
+
+String getMacAddress(){//TODO
+  String res = "";
+  String SETUP = "AT+CIPSTAMAC?\r\n";
+  res = sendData(SETUP, TIMEOUT, DEBUG);
   
-  return accel;
+  return res;
 }
