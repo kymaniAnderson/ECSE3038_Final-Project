@@ -15,15 +15,6 @@ See the `requirements.txt` folder.
 
 The embedded side consists of a sketch that makes the microcontroller send POST requests with the values measured from the gyroscope sensor and the temperature sensor. The MAC address of the ESP8266 is sent as the patient ID.
 
-```json
- // Request
- {
-     "patient_id": <esp_mac_address>,
-     "position": <gyro_value>,
-     "temperature": <temp_value>
- }
-```
-
 ### Backend
 
 The backend consists of 6 url endpoints:
