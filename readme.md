@@ -25,10 +25,10 @@ The backend consists of 6 url endpoints:
 
     ```json
     {
-    	"position": <position>,
-       "temperature": <temperature>,
-       "last_updated": <last_updated>,
-       "patient_id": <patient_id>
+      "position": <position>,
+      "temperature": <temperature>,
+      "last_updated": <last_updated>,
+      "patient_id": <patient_id>
     }
     ```
 
@@ -42,7 +42,7 @@ The backend consists of 6 url endpoints:
 
     ```json
     {
-    	"fname": <first name>,
+      "fname": <first name>,
     	"lname": <last name>,
       "age": <age>,
     	"patient_id": <mac address>
