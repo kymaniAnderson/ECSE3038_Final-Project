@@ -1,0 +1,213 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+
+$padding-lrg: 20px;
+$padding-med: 10px;
+$padding-sml: 5px;
+
+$border-lrg: 20px;
+$border-med: 15px;
+$border-sml: 10px;
+
+$margin-lrg: 50px;
+$margin-med: 25px;
+$margin-sml: 5px;
+
+$txt-lrg: 20px;
+$txt-med: 16px;
+$txt-sml: 14px;
+
+$colors: (
+    txt1: #000000D9,
+    txt2: #6048CC,
+    txt3: #FFFFFF,
+    bckg1: #6048CC,
+    bckg2: #E8EBF3,
+    bckg3: #FFFFFF,
+    bckg4: #000000,
+);
+
+*{
+    font-family: 'Open Sans', sans-serif;
+}
+
+body{
+    margin: 0;
+    background-color: map-get($colors, bckg2);
+}   
+
+/*********************** Nav ***********************/
+nav {
+    background-color: map-get($colors, bckg3);
+    font-size: $txt-med;
+    font-weight: 600;
+
+    ul {
+        margin-left: $margin-lrg;
+        margin-right: $margin-lrg;
+        margin-top: 0;
+        padding: 0;
+
+        list-style-type: none;
+        overflow: hidden;
+      }
+    
+    li a {
+        display: block;
+        color: map-get($colors, txt1);
+        text-align: center;
+        padding: $padding-med;
+        text-decoration: none;
+    }
+
+    .list-left{
+        float: left;
+    }
+
+    .list-right{
+        float: right;
+        padding-top: auto;
+        padding-top: $padding-sml;
+    }
+
+    .active {
+        background-color: map-get($colors, bckg2);
+    }
+
+    .user-icon{
+        padding-right: $padding-sml;
+        padding-left: $padding-sml;
+        border-radius: 5px;
+        background-color: map-get($colors, bckg1);
+                
+        font-weight: 700;
+        font-size: $txt-lrg;
+        color: map-get($colors, txt3);
+    }
+}
+
+/*********************** Cards ***********************/
+.container{
+    margin-left: $margin-lrg - $margin-sml;
+    margin-right: $margin-lrg - $margin-sml;
+    margin-top: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .card-body{
+        margin: $margin-med $margin-sml $margin-med $margin-sml;
+        border-radius: 5px;
+        background-color: map-get($colors, bckg3);
+        width: 250px;
+        max-width: 100%;
+        height: 200px;
+        max-height: 100%;
+        position: relative;
+        border: 0;
+        padding: 0;
+
+        .card-content{
+            text-align: center;
+            padding-left: $padding-lrg;
+            font-weight: 600;
+            float: left;
+
+            i{
+                color: map-get($colors, txt2);
+                font-size: 30px;
+            }
+        }
+        
+        .card-nav{
+            background-color: map-get($colors, bckg1);
+            border-radius: 0px 5px 5px 0px;
+            width: 35px;
+            max-width: 100%;
+            height: 200px;
+            max-height: 100%;
+            float: right;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+
+            i{
+                color: map-get($colors, txt3);
+                font-size: $txt-med;
+            }
+            
+            ul {
+                margin: 0;
+                padding: 0;
+                list-style-type: none;
+                width: 20px;
+            }
+
+            li:not(:last-child) {
+                margin-bottom: 120px;
+            }
+
+            li a {
+                display: block;
+                color: map-get($colors, txt1);
+                text-align: center;
+                padding: $padding-med;
+                text-decoration: none;
+            }     
+
+            li a .hidden-message {
+                visibility: hidden;
+                width: 50px;
+                background-color: map-get($colors, bckg4);
+                color: map-get($colors, txt3);
+                opacity: 0.8;
+                text-align: center;
+                border-radius: 5px;
+                padding: $padding-sml;
+                font-size: $txt-sml;
+                font-weight: 400;
+                position: absolute;
+                margin-left: -$margin-med;
+            }
+
+            li a .hidden-message::after{
+                content: "";
+                position: absolute;
+                bottom: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                transform: rotate(180deg) scaleX(-1);
+                border-color: map-get($colors, bckg4) transparent transparent transparent;
+            }
+                
+            li a:hover .hidden-message{
+                visibility: visible;
+            }
+        }
+    }
+
+    .card-body:hover{
+        cursor: pointer;
+        transform: translateY(-.9%);
+        box-shadow: 0px 6px 18px 0px map-get($colors, bckg4);
+    }
+}
+
+/*********************** Transition ***********************/
+.container{   
+    animation: expand .8s ease forwards;
+}
+
+@keyframes expand {
+    0% {
+      transform: translateX(1400px);
+    }
+    100% {
+      transform: translateX(0px);
+    }
+}
+  
+
+
