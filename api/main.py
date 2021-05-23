@@ -122,6 +122,15 @@ def postPatientData():
             "message": "An error occured while trying to post record"
         }, 400
 
+# ROUTE 4:
+@app.route("/api/record/<path:id>", methods=["GET"])
+def getPatientData(id):
+    filt = {"patient_id" : id}
+
+    # /GET
+    record = db_operations_records.find_one(filt)
+    return  jsonify(loads(dumps(record)))
+
 # Main
 if __name__ == '__main__':
    app.run(debug = True, host="192.168.100.76", port=5000)
