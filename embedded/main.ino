@@ -1,5 +1,3 @@
-#include <Arduino.h>
-#include <SoftwareSerial.h>
 #include <MPU6050.h>
 #include <Wire.h>
 
@@ -8,17 +6,15 @@ MPU6050 mpu;
 #define RX 10
 #define TX 11
 #define DEBUG true
-#define TIMEOUT 3000
+#define TIMEOUT 5000
 #define TEMP_PIN A0
 
-String ID = "Nicho";
-String PW = "15532E&w";
-String HOST = "192.168.137.31";
+String ID = "Digicel_WiFi_dHNK";
+String PW = "eYPXjQ29";
+String HOST = "192.168.100.76";
 int PORT = 5000;
 
 int16_t gx, gy, gz;
-
-SoftwareSerial espSerial(RX, TX); // RX, TX
 
 String sendData(String command, const int timeout, boolean debug);
 String getMacAddress();
@@ -26,7 +22,7 @@ String getPos();
 int getTemp();
 
 void setup(){
-  espSerial.begin(115200);
+  Serial1.begin(115200);
   Serial.begin(115200);
 
   /*******   ESP Setup   *******/
@@ -56,9 +52,9 @@ void loop() {
   START.concat("\"" + HOST + "\"," + PORT);
   sendData(START, TIMEOUT, DEBUG);
 
-  String BODY = "{\"patient_id\":" + getMacAddress() + ", \"position\":" + getPos() + "}\r\n" + ", \"temperature\":" + String(getTemp()) + "}\r\n";
+  String BODY = "{\"patient_id\": \"" + getMacAddress() + "\", \"position\": \"" + getPos() + "\", \"temperature\": " + String(getTemp()) + "}\r\n";
   
-  String POST = "POST /tank HTTP/1.1\r\n";                              //line 1
+  String POST = "POST /api/record HTTP/1.1\r\n";                              //line 1
   POST.concat("Host: " + HOST + ":" + PORT + "\r\n");                   //line 2
   POST.concat("Content-Type: application/json\r\n");                    //line 3 
   POST.concat("Content-Length: " + String(BODY.length()) + "\r\n\r\n"); //line 4
@@ -66,7 +62,7 @@ void loop() {
   Serial.println(POST);
 
   String SEND = "AT+CIPSEND=";
-  SEND.concat(POST.length());
+  SEND.concat(String(POST.length()));
   sendData(SEND, TIMEOUT, DEBUG);
 
   sendData(POST, TIMEOUT, DEBUG);
@@ -75,13 +71,13 @@ void loop() {
 String sendData(String command, const int timeout, boolean debug){
   command.concat("\r\n"); //Simulate enter btn
   String response = "";
-  espSerial.print(command);
+  Serial1.print(command);
 
   long unsigned int time = millis();
 
   while((time + timeout) > millis()){
-      while(espSerial.available()){
-          char c = espSerial.read();
+      while(Serial1.available()){
+          char c = Serial1.read();
           response += c;
         }
     }
@@ -104,20 +100,27 @@ String getPos(){//TODO
   mpu.getRotation(&gx, &gy, &gz);
   String pos;
     
-  if (gy > 2.0){
+  if (gy > 1.0){
     pos = "Upright";
   }
   else{
     pos="Resting";
   }
   
+  Serial.print("Sent Position: \t");
+  Serial.println(pos);
+  Serial.print("Sent Gyro: \t");
+  Serial.println(gy);
+  
   return pos;
 }
 
-String getMacAddress(){//TODO
+String getMacAddress(){
   String res = "";
   String SETUP = "AT+CIPSTAMAC?\r\n";
   res = sendData(SETUP, TIMEOUT, DEBUG);
   
-  return res;
+  String macAddr = res.substring(42, 59);
+  
+  return macAddr;
 }

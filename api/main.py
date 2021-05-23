@@ -4,13 +4,12 @@ from marshmallow import Schema, fields, ValidationError
 from bson.json_util import dumps
 from flask_cors import CORS
 from json import loads
-from keys import keys
 import datetime
 
 app = Flask(__name__)
 CORS(app)
 
-app.config["MONGO_URI"] = "mongodb+srv://admin:"+keys["pw"]+"@cluster0.41j7h.mongodb.net/"+keys["nm"]+"?retryWrites=true&w=majority"
+app.config["MONGO_URI"] = "mongodb+srv://admin:nQwPMWWOpPebXEwD@cluster0.41j7h.mongodb.net/patientsDB?retryWrites=true&w=majority"
 mongo = PyMongo(app)
 
 db_operations_patients = mongo.db.patients
@@ -95,7 +94,7 @@ def patientProfile(id):
 
 # ROUTE 3:
 @app.route("/api/record", methods=["POST"])
-def postPatientData(id):
+def postPatientData():
     try:
         position = request.json["position"]
         temperature = request.json["temperature"]
@@ -125,4 +124,4 @@ def postPatientData(id):
 
 # Main
 if __name__ == '__main__':
-   app.run(debug = True, port="5000")
+   app.run(debug = True, host="192.168.100.76", port=5000)
