@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+
+$padding-lrg: 20px;
+$padding-med: 10px;
+$padding-sml: 5px;
+
+$border-lrg: 20px;
+$border-med: 15px;
+$border-sml: 10px;
+
+$margin-lrg: 50px;
+$margin-med: 25px;
+$margin-sml: 5px;
+
+$txt-lrg: 20px;
+$txt-med: 16px;
+$txt-sml: 14px;
+
+$colors: (
+    txt1: #000000D9,
+    txt2: #6048CC,
+    txt3: #FFFFFF,
+    bckg1: #6048CC,
+    bckg2: #E8EBF3,
+    bckg3: #FFFFFF,
+    bckg4: #000000,
+);
+
+*{
+    font-family: 'Open Sans', sans-serif;
+}
+
+body{
+    margin: 0;
+    background-color: map-get($colors, bckg2);
+}   
+
+/*********************** Nav ***********************/
+nav {
+    background-color: map-get($colors, bckg3);
+    font-size: $txt-med;
+    font-weight: 600;
+
+    ul {
+        margin-left: $margin-lrg;
+        margin-right: $margin-lrg;
+        margin-top: 0;
+        padding: 0;
+
+        list-style-type: none;
+        overflow: hidden;
+      }
+    
+    li a {
+        display: block;
+        color: map-get($colors, txt1);
+        text-align: center;
+        padding: $padding-med;
+        text-decoration: none;
+    }
+
+    .list-left{
+        float: left;
+    }
+
+    .list-right{
+        float: right;
+        padding-top: auto;
+        padding-top: $padding-sml;
+    }
+
+    .active {
+        background-color: map-get($colors, bckg2);
+    }
+
+    .user-icon{
+        padding-right: $padding-sml;
+        padding-left: $padding-sml;
+        border-radius: 5px;
+        background-color: map-get($colors, bckg1);
+                
+        font-weight: 700;
+        font-size: $txt-lrg;
+        color: map-get($colors, txt3);
+    }
+}
+
+/*********************** Form ***********************/
+.form{
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 325px;
+    border-radius: 5px;
+    font-weight: 600;
+    padding: $padding-lrg;
+    box-shadow: 0px 6px 18px 0px map-get($colors, bckg4);
+    background: map-get($colors, bckg3);
+}
+
+  

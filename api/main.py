@@ -133,4 +133,4 @@ def getPatientData(id):
 
 # Main
 if __name__ == '__main__':
-   app.run(debug = True, host="192.168.100.76", port=5000)
+   app.run(debug = True, host="192.168.100.71", port=5000)

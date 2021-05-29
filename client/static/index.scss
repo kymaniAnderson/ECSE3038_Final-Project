@@ -99,7 +99,7 @@ nav {
         margin: $margin-med $margin-sml $margin-med $margin-sml;
         border-radius: 5px;
         background-color: map-get($colors, bckg3);
-        width: 250px;
+        width: 265px;
         max-width: 100%;
         height: 200px;
         max-height: 100%;
@@ -111,7 +111,11 @@ nav {
             text-align: center;
             padding-left: $padding-lrg;
             font-weight: 600;
+            color: map-get($colors, txt1);
             float: left;
+            width: 195px;
+            text-decoration: none;
+            
 
             i{
                 color: map-get($colors, txt2);
@@ -140,14 +144,14 @@ nav {
                 margin: 0;
                 padding: 0;
                 list-style-type: none;
-                width: 20px;
+                width: 35px;
             }
 
             li:not(:last-child) {
                 margin-bottom: 120px;
             }
 
-            li a {
+            li .btn {
                 display: block;
                 color: map-get($colors, txt1);
                 text-align: center;
@@ -155,7 +159,7 @@ nav {
                 text-decoration: none;
             }     
 
-            li a .hidden-message {
+            li .btn .hidden-message {
                 visibility: hidden;
                 width: 50px;
                 background-color: map-get($colors, bckg4);
@@ -170,7 +174,7 @@ nav {
                 margin-left: -$margin-med;
             }
 
-            li a .hidden-message::after{
+            li .btn .hidden-message::after{
                 content: "";
                 position: absolute;
                 bottom: 100%;
@@ -182,7 +186,7 @@ nav {
                 border-color: map-get($colors, bckg4) transparent transparent transparent;
             }
                 
-            li a:hover .hidden-message{
+            li .btn:hover .hidden-message{
                 visibility: visible;
             }
         }
@@ -193,6 +197,35 @@ nav {
         transform: translateY(-.9%);
         box-shadow: 0px 6px 18px 0px map-get($colors, bckg4);
     }
+}
+
+.container#blur.active{
+    filter: blur(20px);
+    pointer-events: none;
+    user-select: none;
+}
+
+.popup-form{
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 525px;
+    border-radius: 5px;
+    font-weight: 600;
+    padding: $padding-lrg;
+    box-shadow: 0px 6px 18px 0px map-get($colors, bckg4);
+    background: map-get($colors, bckg3);
+    display: hidden;
+    opacity: 0;
+    transition: 0.5s;
+}
+
+.popup-form#popup.active{
+    top: 50%;
+    visibility: visible;
+    opacity: 1;
+    transition: 0.5s;
 }
 
 /*********************** Transition ***********************/
@@ -209,5 +242,3 @@ nav {
     }
 }
   
-
-

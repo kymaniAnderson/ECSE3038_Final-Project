@@ -76,7 +76,7 @@ nav .user-icon {
   margin: 25px 5px 25px 5px;
   border-radius: 5px;
   background-color: #FFFFFF;
-  width: 250px;
+  width: 265px;
   max-width: 100%;
   height: 200px;
   max-height: 100%;
@@ -89,7 +89,10 @@ nav .user-icon {
   text-align: center;
   padding-left: 20px;
   font-weight: 600;
+  color: #000000D9;
   float: left;
+  width: 195px;
+  text-decoration: none;
 }
 
 .container .card-body .card-content i {
@@ -126,14 +129,14 @@ nav .user-icon {
   margin: 0;
   padding: 0;
   list-style-type: none;
-  width: 20px;
+  width: 35px;
 }
 
 .container .card-body .card-nav li:not(:last-child) {
   margin-bottom: 120px;
 }
 
-.container .card-body .card-nav li a {
+.container .card-body .card-nav li .btn {
   display: block;
   color: #000000D9;
   text-align: center;
@@ -141,7 +144,7 @@ nav .user-icon {
   text-decoration: none;
 }
 
-.container .card-body .card-nav li a .hidden-message {
+.container .card-body .card-nav li .btn .hidden-message {
   visibility: hidden;
   width: 50px;
   background-color: #000000;
@@ -156,7 +159,7 @@ nav .user-icon {
   margin-left: -25px;
 }
 
-.container .card-body .card-nav li a .hidden-message::after {
+.container .card-body .card-nav li .btn .hidden-message::after {
   content: "";
   position: absolute;
   bottom: 100%;
@@ -169,7 +172,7 @@ nav .user-icon {
   border-color: #000000 transparent transparent transparent;
 }
 
-.container .card-body .card-nav li a:hover .hidden-message {
+.container .card-body .card-nav li .btn:hover .hidden-message {
   visibility: visible;
 }
 
@@ -179,6 +182,43 @@ nav .user-icon {
           transform: translateY(-0.9%);
   -webkit-box-shadow: 0px 6px 18px 0px #000000;
           box-shadow: 0px 6px 18px 0px #000000;
+}
+
+.container#blur.active {
+  -webkit-filter: blur(20px);
+          filter: blur(20px);
+  pointer-events: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.popup-form {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 525px;
+  border-radius: 5px;
+  font-weight: 600;
+  padding: 20px;
+  -webkit-box-shadow: 0px 6px 18px 0px #000000;
+          box-shadow: 0px 6px 18px 0px #000000;
+  background: #FFFFFF;
+  display: hidden;
+  opacity: 0;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.popup-form#popup.active {
+  top: 50%;
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
 }
 
 /*********************** Transition ***********************/

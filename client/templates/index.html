@@ -10,7 +10,7 @@
         <title>Home</title> 
 
         <!------------------     Style-Sheet    ------------------>
-        <link rel="stylesheet" href="/client/index.css">
+        <link rel="stylesheet" href="/client/static/index.css">
 
          <!------------------     Font-Awesome    ------------------>
          <script src="https://kit.fontawesome.com/83715fa62b.js" crossorigin="anonymous"></script>
@@ -28,7 +28,7 @@
                         </a>
                     </li>
                     <li class="list-left">
-                        <a href="addPatient.html">
+                        <a href="patientAdd.html">
                             <span><i class="fas fa-user-plus"></i></span>
                             <span>Add Patient</span>
                         </a>
@@ -42,35 +42,26 @@
         </nav>
      
         <!------------------     Cards    ------------------>
-        <div class="container">      
-            <!-- <button class="card-body" onclick="location.href='profile.html'">
-                <div class="card-content">
-                    <h3 class="card-name"><span>Anderson</span><span>Kymani</span></h3>
-                    <h4 class="card-label">Position:</h4>
-                    <i class="fas fa-bed"></i>
-                    <h5 class="card-position">Resting</h5>
-                </div>
-    
-                <div class="card-nav">
-                    <ul>
-                        <li>
-                            <a href="deleteUser">
-                                <span><i class="far fa-window-close"></i></span>
-                                <span class="hidden-message">Delete</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="editUser">
-                                <span><i class="far fa-edit"></i></span>
-                                <span class="hidden-message">Edit</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </button> -->
+        <div class="container" id="blur"></div>
+
+        <!------------------     Form    ------------------>
+        <div class="popup-form" id="popup">
+            <form action="#">
+                <label for="fname">First Name:</label><br>
+                <input type="text" id="fname" name="fname"><br><br>
+
+                <label for="lname">Last Name:</label><br>
+                <input type="text" id="lname" name="lname"><br><br>
+
+                <label for="age">Age:</label><br>
+                <input type="number" id="age" name="age"><br><br>
+
+                <input type="submit" value="Submit" onclick="toggleForm()">
+            </form>
         </div>
+
         <!------------------     Javascript    ------------------>
-        <script type="text/javascript" src="/client/createCard.js"></script>  
+        <script type="text/javascript" src="/client/scripts/createCard.js"></script>  
     </body> 
 
 </html>

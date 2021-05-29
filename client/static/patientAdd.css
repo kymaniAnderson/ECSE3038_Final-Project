@@ -1,0 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap");
+* {
+  font-family: 'Open Sans', sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: #E8EBF3;
+}
+
+/*********************** Nav ***********************/
+nav {
+  background-color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+nav ul {
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-top: 0;
+  padding: 0;
+  list-style-type: none;
+  overflow: hidden;
+}
+
+nav li a {
+  display: block;
+  color: #000000D9;
+  text-align: center;
+  padding: 10px;
+  text-decoration: none;
+}
+
+nav .list-left {
+  float: left;
+}
+
+nav .list-right {
+  float: right;
+  padding-top: auto;
+  padding-top: 5px;
+}
+
+nav .active {
+  background-color: #E8EBF3;
+}
+
+nav .user-icon {
+  padding-right: 5px;
+  padding-left: 5px;
+  border-radius: 5px;
+  background-color: #6048CC;
+  font-weight: 700;
+  font-size: 20px;
+  color: #FFFFFF;
+}
+
+/*********************** Form ***********************/
+.form {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 325px;
+  border-radius: 5px;
+  font-weight: 600;
+  padding: 20px;
+  -webkit-box-shadow: 0px 6px 18px 0px #000000;
+          box-shadow: 0px 6px 18px 0px #000000;
+  background: #FFFFFF;
+}
+/*# sourceMappingURL=patientAdd.css.map */

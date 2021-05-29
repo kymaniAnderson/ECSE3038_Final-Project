@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!------------------     Boiler Plate    ------------------>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        
+        <!------------------     Title    ------------------>
+        <title>Profile</title> 
+
+        <!------------------     Style-Sheet    ------------------>
+        <link rel="stylesheet" href="/client/static/patientProfile.css">
+
+        <!------------------     Font-Awesome    ------------------>
+        <script src="https://kit.fontawesome.com/83715fa62b.js" crossorigin="anonymous"></script>
+
+        <!------------------     Chart.js    ------------------>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
+    </head>
+
+    <body>
+        <!------------------     NavBar    ------------------>
+        <nav>
+            <div class="nav-items">
+                <ul>
+                    <li class="list-left active">
+                        <a href="index.html">
+                            <span><i class="fas fa-home"></i></span>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="list-left">
+                        <a href="patientAdd.html">
+                            <span><i class="fas fa-user-plus"></i></span>
+                            <span>Add Patient</span>
+                        </a>
+                    </li>
+                    <li class="list-right"> 
+                        <span> Welcome, <b>User</b> </span>
+                        <span class="user-icon">U</span>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+     
+        <!------------------     Container    ------------------>
+        <div class="container">
+            <h3>Joseph, Roy</h3>
+
+            <div class="chart">
+                <canvas id="chart"></canvas>
+            </div>
+            
+            <h5>Position: Standing</h5>
+            <h5>Temperature: 59°</h5>
+        </div>
+      
+        <!------------------     Javascript    ------------------>
+        <script type="text/javascript" src="/client/scripts/createChart.js"></script>  
+    </body> 
+
+</html>
