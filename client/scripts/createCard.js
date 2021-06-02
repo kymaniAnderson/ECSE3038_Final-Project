@@ -1,3 +1,8 @@
+// VARIABLE DECLARATIONS:
+var connectionURL = "http://172.16.188.215:5000"
+var incomingPos = ""
+var incomingID = ""
+
 function createPatientCard(patient, pos){
     //START: Card Body as DIV:
     var patientCardDiv = document.createElement("DIV");
@@ -27,6 +32,7 @@ function createPatientCard(patient, pos){
     patientPositionLabel.innerHTML = "Position:";
 
     var patientPositionIcon = document.createElement("I");
+    patientPositionIcon.setAttribute("id", "patientPositionIcon:".concat(patient.patient_id));
 
     if (pos === "Standing") {
         patientPositionIcon.classList.add("fas", "fa-male");
@@ -35,8 +41,9 @@ function createPatientCard(patient, pos){
     }
     
     var patientPosition = document.createElement("H5");
+    patientPosition.setAttribute("id", "patientPosition:".concat(patient.patient_id))
     patientPosition.classList.add("card-position");
-    patientPosition.innerHTML = pos;
+    patientPosition.innerHTML = pos; 
 
     //END: Card Content as DIV:
     patientCardContent.append(patientName);
@@ -56,7 +63,7 @@ function createPatientCard(patient, pos){
     //Delete:
     var btn1 = document.createElement("DIV");
     btn1.classList.add("btn");
-    btn1.setAttribute("onclick", "delFunc(".concat(patient.patient_id).concat(")"));
+    btn1.setAttribute("onclick", "delFunc('".concat(patient.patient_id).concat("')"));
 
     var btn1Span1 = document.createElement("SPAN");
     var i1 = document.createElement("I");
@@ -72,7 +79,7 @@ function createPatientCard(patient, pos){
     //Edit:
     var btn2 = document.createElement("DIV");
     btn2.classList.add("btn");
-    btn2.setAttribute("onclick", "return toggleForm()");
+    btn2.setAttribute("onclick", "toggleForm('".concat(patient.patient_id).concat("')"));
 
     var btn2Span1 = document.createElement("SPAN");
     var i2 = document.createElement("I");
@@ -100,94 +107,26 @@ function createPatientCard(patient, pos){
     return patientCardDiv;
 }
 
-function createForm(){
-    //START: Form wrapper as DIV:
-    var formWrapper = document.createElement("DIV");
-    formWrapper.classList.add("popup-form");
-
-    //START: Form as FORM:
-    var form = document.createElement("FORM");
-    form.setAttribute("action", "#");
-
-    //First Name:
-    var labelFName = document.createElement("LABEL");
-    labelFName.setAttribute("for", "fname");
-    var break1 = document.createElement("BR");
-    
-    var fieldFName = document.createElement("INPUT");
-    fieldFName.setAttribute("type", "text");
-    fieldFName.setAttribute("name", "fname");
-    fieldFName.setAttribute("id", "fname");
-    var break2 = document.createElement("BR");
-    
-    form.append(labelFName);
-    form.append(break1);
-    form.append(fieldFName);
-    form.append(break2);
-
-    //Last Name:
-    var labelLName = document.createElement("LABEL");
-    labelLName.setAttribute("for", "lname");
-    var break3 = document.createElement("BR");
-    
-    var fieldLName = document.createElement("INPUT");
-    fieldLName.setAttribute("type", "text");
-    fieldLName.setAttribute("name", "lname");
-    fieldLName.setAttribute("id", "lname");
-    var break4 = document.createElement("BR");
-     
-    form.append(labelLName);
-    form.append(break3);
-    form.append(fieldLName);
-    form.append(break4);
-
-    //Age:
-    var labelAge = document.createElement("LABEL");
-    labelAge.setAttribute("for", "age");
-    var break5 = document.createElement("BR");
-      
-    var fieldAge = document.createElement("INPUT");
-    fieldAge.setAttribute("type", "number");
-    fieldAge.setAttribute("name", "age");
-    fieldAge.setAttribute("id", "age");
-    var break6 = document.createElement("BR");
-
-    form.append(labelAge);
-    form.append(break5);
-    form.append(fieldAge);
-    form.append(break6);
-
-    //Submit:
-    var submit = document.createElement("INPUT");
-    submit.setAttribute("type", "submit");
-    submit.setAttribute("value", "submit");
-    submit.setAttribute("onclick", "toggleForm()");
-
-    //STOP: Form as FORM:
-    form.append(submit);
-
-    //STOP: Form wrapper as DIV:
-    formWrapper.append(form);
-
-    return formWrapper;
-}
-
-function toggleForm(event){
+function toggleForm(id){
     var blur = document.getElementById("blur");
     blur.classList.toggle("active");
-    
     var popup = document.getElementById("popup");
     popup.classList.toggle("active");
+
+    var submit = document.getElementById("submit");
+    submit.classList.add("".concat(id));
+
+    console.log("PATCH: ".concat(id));
 }
 
 function getPatients(){
-    return fetch("http://192.168.100.71:5000/api/patient")
+    return fetch(connectionURL.concat("/api/patient"))
     .then((res) => res.json())
     .then((json) => json);
 }
 
 function getRecord(patient_id){
-    return fetch("http://192.168.100.71:5000/api/record/".concat(patient_id))
+    return fetch(connectionURL.concat("/api/record/").concat(patient_id))
     .then((res) => res.json())
     .then((json) => json);
 }
@@ -214,8 +153,8 @@ window.onload = function() {
   drawCard();
 };
 
-function delFunc(patient_id){
-    var funcPath = "/api/patient/".concat(patient_id);
+function delFunc(id){
+    var funcPath = connectionURL.concat("/api/patient/").concat(id);
 
     return fetch(funcPath, {
         method: "DELETE",
@@ -225,13 +164,60 @@ function delFunc(patient_id){
     });
 }
 
-function patchFunc(patient_id){
-    var funcPath = "/api/patient/".concat(patient_id);
+document.getElementById("submit").addEventListener("click", function(event){
+    let patient_id = document.getElementById("patient_id").value;
+    let fname = document.getElementById("fname").value;
+    let lname = document.getElementById("lname").value;
+    let age = document.getElementById("age").value;
 
-    return fetch(funcPath, {
+    jsonBody = {};
+    
+    if (patient_id !== "") jsonBody["patient_id"] = patient_id;
+    if (fname !== "") jsonBody["fname"] = fname;
+    if (lname !== "") jsonBody["lname"] = lname;
+    if (age !== "") jsonBody["age"] = age;
+
+    var id = document.getElementById("submit").className;
+
+    var funcPath = connectionURL.concat("/api/patient/").concat(id);
+    fetch(funcPath, {
         method: "PATCH",
+        body: JSON.stringify(jsonBody),
         headers: {
             "Content-type": "application/json",
+        },
+    })
+    .then((res) => res.json)
+    .then((json) => console.log(json));
+
+    toggleForm("123");
+});
+
+var eventSource = new EventSource(connectionURL.concat("/listen"))
+eventSource.addEventListener("message", function(e){
+    console.log(e.data)
+}, false)
+
+var eventSource = new EventSource(connectionURL.concat("/listen"))
+eventSource.addEventListener("online", function(e){
+    data = JSON.parse(e.data);
+    incomingPos = data.position;
+    incomingID = data.patient_id;
+
+    iconID = document.getElementById("patientPositionIcon:".concat(incomingID));
+    labelID = document.getElementById("patientPosition:".concat(incomingID));
+    
+    try{
+        //change the icon:
+        if (incomingPos === "Standing") {
+            iconID.setAttribute("class", "fas fa-male");
+        } else{
+            iconID.setAttribute("class", "fas fa-bed");
         }
-    });
-}
+
+        //change the label:
+        labelID.innerHTML = incomingPos;
+    }
+    catch(err){
+    }
+}, true)

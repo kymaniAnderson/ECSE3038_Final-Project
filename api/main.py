@@ -1,10 +1,14 @@
-from flask import Flask, request, jsonify
+from gevent import monkey; monkey.patch_all()
+from flask import Flask, request, jsonify, Response, stream_with_context
+from gevent.pywsgi import WSGIServer
 from flask_pymongo import PyMongo
 from marshmallow import Schema, fields, ValidationError
 from bson.json_util import dumps
 from flask_cors import CORS
 from json import loads
+import json
 import datetime
+import time
 
 app = Flask(__name__)
 CORS(app)
@@ -27,6 +31,9 @@ class RecordSchema(Schema):
     temperature = fields.Integer(required=True)
     last_updated = fields.String(required=True)
     patient_id = fields.String(required=True)
+
+incomingPos = ""
+incomingID = ""
 
 # ROUTE 1:
 @app.route("/api/patient", methods=["GET", "POST"])
@@ -101,6 +108,10 @@ def postPatientData():
         last_updated = dte.strftime("%c")
         patient_id = request.json["patient_id"]
 
+        global incomingPos, incomingID
+        incomingPos = position
+        incomingID = patient_id
+
         jsonBody = {
             "position": position,
             "temperature": temperature,
@@ -126,11 +137,34 @@ def postPatientData():
 @app.route("/api/record/<path:id>", methods=["GET"])
 def getPatientData(id):
     filt = {"patient_id" : id}
+    srt = ("last_updated", -1)
 
     # /GET
     record = db_operations_records.find_one(filt)
     return  jsonify(loads(dumps(record)))
 
+# ROUTE Listen:
+@app.route("/listen")
+def listen():
+    def respondToClient():
+        while True:
+            global incomingPos, incomingID
+
+            jsonBody = {
+                "position": incomingPos,
+                "patient_id": incomingID
+            }
+
+            data = json.dumps(jsonBody)
+            yield f"id: 1\ndata: {data}\nevent: online\n\n"
+            time.sleep(0.5)
+        
+    return Response(respondToClient(), mimetype='text/event-stream')
+            
+
+
 # Main
 if __name__ == '__main__':
-   app.run(debug = True, host="192.168.100.71", port=5000)
+    http_server = WSGIServer(("172.16.188.215", 5000), app)
+    http_server.serve_forever()
+    # app.run(debug = True, host="192.168.100.76", port=5000)

@@ -25,3 +25,11 @@ var myChart = new Chart(ctx, {
         }
     }
 });
+
+function createHeading(){
+    pass;
+}
+
+function createChart(){
+    pass;
+}
