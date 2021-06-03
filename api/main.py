@@ -174,6 +174,6 @@ def listen():
             
 # Main
 if __name__ == '__main__':
-    http_server = WSGIServer(("192.168.100.68", 5000), app)
+    http_server = WSGIServer(("172.16.188.48", 5000), app)
     http_server.serve_forever()
     # app.run(debug = True, host="192.168.100.68", port=5000)

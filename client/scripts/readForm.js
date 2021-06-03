@@ -1,5 +1,5 @@
 // VARIABLE DECLARATIONS:
-var connectionURL = "http://172.16.188.215:5000"
+var connectionURL = "http://172.16.188.48:5000"
 
 document.getElementById("patient-submit").addEventListener("click", function(event){
     event.preventDefault();

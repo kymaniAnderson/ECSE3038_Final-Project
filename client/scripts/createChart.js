@@ -1,11 +1,11 @@
-var connectionURL = "http://192.168.100.68:5000"
+var connectionURL = "http://172.16.188.48:5000"
 var id = ""
 var xAxis = [];
 var yAxis = [];
 
 window.onload = function() {
     id = sessionStorage.getItem("patient_id");
-    //sessionStorage.removeItem("patient_id");
+    sessionStorage.removeItem("patient_id");
 
     drawChart();
 };
@@ -30,7 +30,7 @@ async function getPosTemp(){
             document.getElementById("position").innerHTML = record.position;
             document.getElementById("temperature").innerHTML = record.temperature;
             yAxis.push(record.temperature);
-            xAxis.push(record.last_updated);
+            xAxis.push(record.last_updated.slice(4));
         }
     });
 
@@ -56,7 +56,6 @@ function createPatientChart(){
         data: {
             labels: xAxis,
             datasets: [{
-                label: 'Patient Temperature Over The Last 30mins',
                 data: yAxis,
                 fill: true,
                 borderColor: '#6048CC',
@@ -64,12 +63,34 @@ function createPatientChart(){
                 tension: 0.1
             }]
         },
-        options: {
+        options: {            
+            layout: {
+                padding: 25
+            },
             scales: {
+                x: {
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 90,
+                        minRotation: 90
+                    }
+                },
                 y: {
                     ticks: {
                         callback: function(value) {
                             return value + '°';
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false,
+
+                    labels: {
+                        font: {
+                            size: 14,
+                            weight: 600
                         }
                     }
                 }

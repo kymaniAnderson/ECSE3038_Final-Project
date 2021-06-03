@@ -1,5 +1,5 @@
 // VARIABLE DECLARATIONS:
-var connectionURL = "http://192.168.100.68:5000"
+var connectionURL = "http://172.16.188.48:5000"
 var incomingPos = ""
 var incomingID = ""
 

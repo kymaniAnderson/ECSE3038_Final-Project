@@ -91,12 +91,32 @@ nav {
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 325px;
+    width: 525px;
     border-radius: 5px;
     font-weight: 600;
     padding: $padding-lrg;
     box-shadow: 0px 6px 18px 0px map-get($colors, bckg4);
     background: map-get($colors, bckg3);
-}
+   
+    form{
+        input:not(:last-child){
+            width: 65%;
+        }
 
-  
+        #patient-submit{
+            height: 35px;
+            width: 85px;
+            border: none;
+            outline: 0;
+            border-radius: 5px;
+            padding: $padding-sml;
+            background-color: map-get($colors, bckg1);
+            cursor: pointer;
+            text-align: center;
+            font-weight: 700;
+            font-size: $txt-med;
+            color: map-get($colors, txt3);
+            float: right;
+        }
+    }
+}

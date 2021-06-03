@@ -52,6 +52,7 @@
                     <span id="lname">
                         Waiting..
                     </span>
+                    <span>,&nbsp;</span>
                     <span id="fname">
                         Waiting..
                     </span>
@@ -59,7 +60,7 @@
     
                 <h5>
                     <span>
-                        Position: 
+                        Position:&nbsp; 
                     </span>
                     <span id="position">
                         Waiting..
@@ -68,7 +69,7 @@
                    
                 <h5>
                     <span>
-                        Temperature(°C): 
+                        Temperature(°C):&nbsp; 
                     </span>
                     <span id="temperature">
                         Waiting..
@@ -77,13 +78,16 @@
             </div>
             
             <!------------------     Graph   ------------------>
-            <div class="chart">
-                <canvas id="chart"></canvas>
+            <div class="chart-title"> 
+                <h3> Temperature Vs. Time</h3>
+            </div>
+
+            <div class="chart-body">
+                    <canvas id="chart"></canvas>
             </div>
         </div>
       
         <!------------------     Javascript    ------------------>
         <script type="text/javascript" src="/client/scripts/createChart.js"></script>  
     </body> 
-
 </html>

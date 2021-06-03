@@ -1,5 +1,151 @@
-@import url(index.css);
-.chart {
-  width: 100%;
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap");
+* {
+  font-family: 'Open Sans', sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: #E8EBF3;
+}
+
+/*********************** Nav ***********************/
+nav {
+  background-color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+nav ul {
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-top: 0;
+  padding: 0;
+  list-style-type: none;
+  overflow: hidden;
+}
+
+nav li a {
+  display: block;
+  color: #000000D9;
+  text-align: center;
+  padding: 10px;
+  text-decoration: none;
+}
+
+nav .list-left {
+  float: left;
+}
+
+nav .list-right {
+  float: right;
+  padding-top: auto;
+  padding-top: 5px;
+}
+
+nav .active {
+  background-color: #E8EBF3;
+}
+
+nav .user-icon {
+  padding-right: 5px;
+  padding-left: 5px;
+  border-radius: 5px;
+  background-color: #6048CC;
+  font-weight: 700;
+  font-size: 20px;
+  color: #FFFFFF;
+}
+
+/*********************** Content ***********************/
+.container {
+  margin-left: 50px;
+  margin-right: 50px;
+  padding: 0;
+}
+
+.container .patient-info {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #FFFFFF;
+  border: 5px;
+}
+
+.container .patient-info h3, .container .patient-info h5 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.container .patient-info h3 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.container .patient-info h5 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/*********************** Graph ***********************/
+.chart-title {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 25px;
+  padding: 0;
+}
+
+.chart-title h3 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #6048CC;
+  border: 5px;
+  color: #FFFFFF;
+  font-size: 20px;
+  font-weight: 700;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.chart-body {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+  padding: 0;
+}
+
+.chart-body canvas {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 25px;
+  width: 50%;
+  background-color: #FFFFFF;
+  border: 5px;
+  color: #FFFFFF;
+  font-size: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 /*# sourceMappingURL=patientProfile.css.map */
