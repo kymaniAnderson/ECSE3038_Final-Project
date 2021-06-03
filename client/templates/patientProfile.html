@@ -46,14 +46,40 @@
      
         <!------------------     Container    ------------------>
         <div class="container">
-            <h3>Joseph, Roy</h3>
-
+            <!------------------     Patient Information   ------------------>
+            <div class="patient-info">
+                <h3>
+                    <span id="lname">
+                        Waiting..
+                    </span>
+                    <span id="fname">
+                        Waiting..
+                    </span>
+                </h3>
+    
+                <h5>
+                    <span>
+                        Position: 
+                    </span>
+                    <span id="position">
+                        Waiting..
+                    </span>
+                </h5>
+                   
+                <h5>
+                    <span>
+                        Temperature(°C): 
+                    </span>
+                    <span id="temperature">
+                        Waiting..
+                    </span>
+                </h5>
+            </div>
+            
+            <!------------------     Graph   ------------------>
             <div class="chart">
                 <canvas id="chart"></canvas>
             </div>
-            
-            <h5>Position: Standing</h5>
-            <h5>Temperature: 59°</h5>
         </div>
       
         <!------------------     Javascript    ------------------>

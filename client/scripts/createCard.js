@@ -1,5 +1,5 @@
 // VARIABLE DECLARATIONS:
-var connectionURL = "http://172.16.188.215:5000"
+var connectionURL = "http://192.168.100.68:5000"
 var incomingPos = ""
 var incomingID = ""
 
@@ -11,7 +11,7 @@ function createPatientCard(patient, pos){
     //START: Card Content as A:
     var patientCardContent = document.createElement("A");
     patientCardContent.classList.add("card-content");
-    patientCardContent.setAttribute("href", "/client/templates/patientProfile.html");
+    patientCardContent.setAttribute("onclick", "goToGraph('".concat(patient.patient_id).concat("')"));
 
     //Patient Name as H3, SPAN:
     var patientName = document.createElement("H3");
@@ -162,6 +162,11 @@ function delFunc(id){
             "Content-type": "application/json",
         }
     });
+}
+
+function goToGraph(id){
+    sessionStorage.setItem("patient_id", id);
+    window.location.href = "/client/templates/patientProfile.html";
 }
 
 document.getElementById("submit").addEventListener("click", function(event){

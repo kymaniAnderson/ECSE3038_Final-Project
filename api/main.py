@@ -33,6 +33,7 @@ class RecordSchema(Schema):
     patient_id = fields.String(required=True)
 
 incomingPos = ""
+incomingTemp = ""
 incomingID = ""
 
 # ROUTE 1:
@@ -100,38 +101,47 @@ def patientProfile(id):
         return  jsonify(loads(dumps(patient)))
 
 # ROUTE 3:
-@app.route("/api/record", methods=["POST"])
+@app.route("/api/record", methods=["GET", "POST"])
 def postPatientData():
-    try:
-        position = request.json["position"]
-        temperature = request.json["temperature"]
-        last_updated = dte.strftime("%c")
-        patient_id = request.json["patient_id"]
+    if request.method == "POST":
+        # POST:
+        try:
+            position = request.json["position"]
+            temperature = request.json["temperature"]
+            last_updated = dte.strftime("%c")
+            patient_id = request.json["patient_id"]
 
-        global incomingPos, incomingID
-        incomingPos = position
-        incomingID = patient_id
+            global incomingPos, incomingID, incomingTemp
+            incomingPos = position
+            incomingID = patient_id
+            incomingTemp = temperature
 
-        jsonBody = {
-            "position": position,
-            "temperature": temperature,
-            "last_updated": last_updated,
-            "patient_id": patient_id
-        }
+            jsonBody = {
+                "position": position,
+                "temperature": temperature,
+                "last_updated": last_updated,
+                "patient_id": patient_id
+            }
 
-        newRecord = RecordSchema().load(jsonBody)
-        db_operations_records.insert_one(newRecord)
+            newRecord = RecordSchema().load(jsonBody)
+            db_operations_records.insert_one(newRecord)
 
-        return{
-            "success": True,
-            "message": "Record saved to database successfully"
-        }, 200
+            return{
+                "success": True,
+                "message": "Record saved to database successfully"
+            }, 200
 
-    except ValidationError as err2:
-        return{
-            "success": False,
-            "message": "An error occured while trying to post record"
-        }, 400
+        except ValidationError as err2:
+            return{
+                "success": False,
+                "message": "An error occured while trying to post record"
+            }, 400
+
+    else:
+        # GET:
+        records = db_operations_records.find()
+        return  jsonify(loads(dumps(records))), 200
+
 
 # ROUTE 4:
 @app.route("/api/record/<path:id>", methods=["GET"])
@@ -148,10 +158,11 @@ def getPatientData(id):
 def listen():
     def respondToClient():
         while True:
-            global incomingPos, incomingID
+            global incomingPos, incomingTemp, incomingID
 
             jsonBody = {
                 "position": incomingPos,
+                "temperature": incomingTemp,
                 "patient_id": incomingID
             }
 
@@ -161,10 +172,8 @@ def listen():
         
     return Response(respondToClient(), mimetype='text/event-stream')
             
-
-
 # Main
 if __name__ == '__main__':
-    http_server = WSGIServer(("172.16.188.215", 5000), app)
+    http_server = WSGIServer(("192.168.100.68", 5000), app)
     http_server.serve_forever()
-    # app.run(debug = True, host="192.168.100.76", port=5000)
+    # app.run(debug = True, host="192.168.100.68", port=5000)
