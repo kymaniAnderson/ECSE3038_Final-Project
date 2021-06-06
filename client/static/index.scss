@@ -220,10 +220,19 @@ nav {
     display: hidden;
     opacity: 0;
     transition: 0.5s;
+
+    
+    .back-btn{
+        cursor: pointer;
+        font-weight: 700;
+        font-size: $txt-lrg;
+    }
+    
+    .back-btn:hover{
+        color: map-get($colors, txt2);
+    }
     
     form{
-        
-
         input:not(:last-child){
             width: 65%;
         }

@@ -214,6 +214,16 @@ nav .user-icon {
   transition: 0.5s;
 }
 
+.popup-form .back-btn {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.popup-form .back-btn:hover {
+  color: #6048CC;
+}
+
 .popup-form form input:not(:last-child) {
   width: 65%;
 }

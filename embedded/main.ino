@@ -11,7 +11,7 @@ MPU6050 mpu;
 
 String ID = "Digicel_WiFi_dHNK";
 String PW = "eYPXjQ29";
-String HOST = "192.168.100.71";
+String HOST = "192.168.100.77";
 int PORT = 5000;
 
 int16_t gx, gy, gz;

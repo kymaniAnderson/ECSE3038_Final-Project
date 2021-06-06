@@ -1,13 +1,13 @@
-var connectionURL = "http://172.16.188.48:5000"
+var connectionURL = "http://192.168.100.77:5000"
 var id = ""
 var xAxis = [];
 var yAxis = [];
+var patientChart;
+var prevTime = "";
 
 window.onload = function() {
     id = sessionStorage.getItem("patient_id");
-    sessionStorage.removeItem("patient_id");
-
-    drawChart();
+    drawChart();  
 };
 
 function getPatient(patient_id){
@@ -42,16 +42,20 @@ async function drawChart(){
     let patient = await getPatient(id);
     console.log(patient);
 
-    document.getElementById("lname").innerHTML = patient.lname;
+    document.getElementById("lname").innerHTML = patient.lname.toUpperCase();
     document.getElementById("fname").innerHTML = patient.fname;
 
     getPosTemp();
-    createPatientChart();
+
+     setTimeout(function(){
+         createPatientChart();
+     },250);
+    
 }
 
 function createPatientChart(){
     var chart = document.getElementById('chart').getContext('2d');
-    new Chart(chart, {
+    patientChart = new Chart(chart, {
         type: 'line',
         data: {
             labels: xAxis,
@@ -110,12 +114,34 @@ eventSource.addEventListener("online", function(e){
     var incomingPos = data.position;
     var incomingTemp = data.temperature;
     var incomingID = data.patient_id;
+    var incomingTime = data.last_updated.slice(4);
 
-    if (incomingID === id){
+    console.log(incomingTime);
+    console.log(prevTime);
+
+    if (incomingID === id && incomingTime != prevTime){
         document.getElementById("position").innerHTML = incomingPos;
         document.getElementById("temperature").innerHTML = incomingTemp;
+            
+        console.log("Updating...");
+
+        try{
+            patientChart.data.labels.push(incomingTime);
+            patientChart.data.datasets[0].data.push(incomingTemp);
+            patientChart.update();
+
+            prevTime = incomingTime;
+        }
+        catch(e){
+            if (e instanceof TypeError) {
+                console.log("--");
+            }
+            else{
+                throw e;
+            }
+        } 
     }
     else{
-        // pass
+        console.log("Waiting...")
     }
 }, true)

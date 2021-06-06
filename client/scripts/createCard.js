@@ -1,5 +1,5 @@
 // VARIABLE DECLARATIONS:
-var connectionURL = "http://172.16.188.48:5000"
+var connectionURL = "http://192.168.100.77:5000"
 var incomingPos = ""
 var incomingID = ""
 
@@ -132,9 +132,19 @@ function getRecord(patient_id){
 }
 
 async function getPosition(patient_id){
-    let record = await getRecord(patient_id);
-    console.log(record.position);
-    return record.position;
+    try{
+        let record = await getRecord(patient_id);
+        console.log(record.position);
+        return record.position;
+    } 
+    catch(e){
+        if (e instanceof TypeError) {
+            console.log("--");
+        }
+        else{
+            throw e;
+        }
+    } 
 }
 
 async function drawCard(){
@@ -150,24 +160,34 @@ async function drawCard(){
 }
 
 window.onload = function() {
-  drawCard();
+    sessionStorage.clear();  
+    setTimeout(function(){
+        drawCard();
+    },50);
+ 
 };
 
 function delFunc(id){
     var funcPath = connectionURL.concat("/api/patient/").concat(id);
-
-    return fetch(funcPath, {
+    
+    fetch(funcPath, {
         method: "DELETE",
         headers: {
             "Content-type": "application/json",
         }
     });
+
+    window.location.reload();
 }
 
 function goToGraph(id){
     sessionStorage.setItem("patient_id", id);
     window.location.href = "/client/templates/patientProfile.html";
 }
+
+document.getElementById("back").addEventListener("click", function(event){
+    window.location.reload();
+});
 
 document.getElementById("submit").addEventListener("click", function(event){
     let patient_id = document.getElementById("patient_id").value;
@@ -208,6 +228,7 @@ eventSource.addEventListener("online", function(e){
     data = JSON.parse(e.data);
     incomingPos = data.position;
     incomingID = data.patient_id;
+    console.log(data);
 
     iconID = document.getElementById("patientPositionIcon:".concat(incomingID));
     labelID = document.getElementById("patientPosition:".concat(incomingID));

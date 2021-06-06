@@ -7,7 +7,7 @@ from bson.json_util import dumps
 from flask_cors import CORS
 from json import loads
 import json
-import datetime
+from datetime import datetime
 import time
 
 app = Flask(__name__)
@@ -18,7 +18,6 @@ mongo = PyMongo(app)
 
 db_operations_patients = mongo.db.patients
 db_operations_records = mongo.db.records
-dte = datetime.datetime.now()
 
 class PatientSchema(Schema):
     fname = fields.String(required=True)
@@ -35,6 +34,7 @@ class RecordSchema(Schema):
 incomingPos = ""
 incomingTemp = ""
 incomingID = ""
+incomingTime = ""
 
 # ROUTE 1:
 @app.route("/api/patient", methods=["GET", "POST"])
@@ -108,13 +108,14 @@ def postPatientData():
         try:
             position = request.json["position"]
             temperature = request.json["temperature"]
-            last_updated = dte.strftime("%c")
+            last_updated = datetime.now().strftime("%c")
             patient_id = request.json["patient_id"]
 
-            global incomingPos, incomingID, incomingTemp
+            global incomingPos, incomingID, incomingTemp, incomingTime
             incomingPos = position
             incomingID = patient_id
             incomingTemp = temperature
+            incomingTime = last_updated
 
             jsonBody = {
                 "position": position,
@@ -142,13 +143,11 @@ def postPatientData():
         records = db_operations_records.find()
         return  jsonify(loads(dumps(records))), 200
 
-
 # ROUTE 4:
 @app.route("/api/record/<path:id>", methods=["GET"])
 def getPatientData(id):
     filt = {"patient_id" : id}
-    srt = ("last_updated", -1)
-
+   
     # /GET
     record = db_operations_records.find_one(filt)
     return  jsonify(loads(dumps(record)))
@@ -158,12 +157,13 @@ def getPatientData(id):
 def listen():
     def respondToClient():
         while True:
-            global incomingPos, incomingTemp, incomingID
+            global incomingPos, incomingTemp, incomingID, incomingTime
 
             jsonBody = {
                 "position": incomingPos,
                 "temperature": incomingTemp,
-                "patient_id": incomingID
+                "patient_id": incomingID,
+                "last_updated": incomingTime
             }
 
             data = json.dumps(jsonBody)
@@ -174,6 +174,6 @@ def listen():
             
 # Main
 if __name__ == '__main__':
-    http_server = WSGIServer(("172.16.188.48", 5000), app)
+    http_server = WSGIServer(("192.168.100.77", 5000), app)
     http_server.serve_forever()
     # app.run(debug = True, host="192.168.100.68", port=5000)
